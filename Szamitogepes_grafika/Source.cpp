@@ -10,6 +10,9 @@
 #include <fstream>
 #include <math.h>
 
+#include <iostream>
+#include <fstream>
+
 using namespace std;
 
 static int WIN_WIDTH = 1500;
@@ -22,23 +25,12 @@ std::vector<glm::vec3> pointToDraw;
 
 glm::vec3 purple = glm::vec3(0.3f, 0.33f, 1.0f);
 
-static std::vector<glm::vec3> myPoints =
-{
-	glm::vec3(-0.85f, -0.75f, 0.0f), purple,
-	glm::vec3(-0.75f, 0.25f, 0.0f), purple,
-	glm::vec3(-0.25f, 0.75f, 0.0f), purple,
-	glm::vec3(0.25f, 0.95f, 0.0f), purple,
-	glm::vec3(0.65f, 0.75f, 0.0f), purple,
-	glm::vec3(0.25f, -0.75f, 0.0f), purple,
-	glm::vec3(-0.4f, -0.5f, 0.0f), purple,
-	glm::vec3(0.25f, 0.25f, 0.0f), purple,
-	glm::vec3(0.0f, 0.5f, 0.0f), purple,
-	glm::vec3(-0.5f, 0.0f, 0.0f), purple,
-	glm::vec3(-0.5f, -0.75f, 0.0f), purple,
-};
+static std::vector<glm::vec3> myPoints;
 
-int nurbs_n = myPoints.size() / 2 - 1, nurbs_p = 3;
-const int knot_len = nurbs_n + nurbs_p + 2;
+int nurbs_n;
+int nurbs_p = 3;
+double maxX = 0, maxY = 0;
+const int knot_len = 1000;
 int* knots = new int[knot_len];
 /* Vertex buffer objektum és vertex array objektum az adattároláshoz.*/
 GLuint VBO, kontrollPontokVBO;
@@ -384,6 +376,45 @@ void display(GLFWwindow* window, double currentTime) {
 }
 
 int main(void) {
+	std::string filename = "C:/CODE/geomod/export2.txt";
+	ifstream MyReadFile(filename);
+	string myText;
+	while (getline(MyReadFile, myText)) {
+		std::string delimiter = " ";
+		std::string token1 = myText.substr(0, myText.find(delimiter));
+		myText.erase(0, myText.find(delimiter) + 1);
+		double x = (std::stof(token1));
+		if (x > maxX) {
+			maxX = x;
+		}
+		double y = (std::stof(myText));
+		if (y > maxY) {
+			maxY = y;
+		}
+	}
+	MyReadFile.close();
+
+	ifstream MyReadFile1(filename);
+	getline(MyReadFile1, myText);
+	getline(MyReadFile1, myText);
+	while (getline(MyReadFile1, myText)) {
+		std::string delimiter = " ";
+		std::string token1 = myText.substr(0, myText.find(delimiter));
+		myText.erase(0, myText.find(delimiter) + 1);
+
+		// FIXME
+		double x = ((std::stof(token1)) / (maxX) - 0.25) * 2;
+		double y = ((std::stof(myText)) / (maxY) - 0.25) * 4;
+
+		myPoints.push_back(glm::vec3(x, y, 0.0f));
+		myPoints.push_back(purple);
+	}
+	MyReadFile1.close();
+	myPoints.pop_back();
+	myPoints.pop_back();
+	myPoints.pop_back();
+	myPoints.pop_back();
+	nurbs_n = myPoints.size() / 2 - 1;
 
 	/* Próbáljuk meg inicializálni a GLFW-t! */
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
