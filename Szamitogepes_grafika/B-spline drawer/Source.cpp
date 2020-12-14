@@ -395,8 +395,11 @@ int main(void) {
 	MyReadFile.close();
 
 	ifstream MyReadFile1(filename);
-	getline(MyReadFile1, myText);
-	getline(MyReadFile1, myText);
+	for (int i = 0; i < 4; i++)
+	{
+		getline(MyReadFile1, myText);
+	}
+
 	while (getline(MyReadFile1, myText)) {
 		std::string delimiter = " ";
 		std::string token1 = myText.substr(0, myText.find(delimiter));
@@ -410,10 +413,13 @@ int main(void) {
 		myPoints.push_back(purple);
 	}
 	MyReadFile1.close();
-	myPoints.pop_back();
-	myPoints.pop_back();
-	myPoints.pop_back();
-	myPoints.pop_back();
+
+	for (int i = 0; i < 4; i++)
+	{
+		myPoints.pop_back();
+		myPoints.pop_back();
+	}
+	
 	nurbs_n = myPoints.size() / 2 - 1;
 
 	/* Próbáljuk meg inicializálni a GLFW-t! */
@@ -424,7 +430,7 @@ int main(void) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 	/* Próbáljuk meg létrehozni az ablakunkat. */
-	GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "Bezier gorbe", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WIN_WIDTH, WIN_HEIGHT, "B-spline", NULL, NULL);
 
 	/* Válasszuk ki az ablakunk OpenGL kontextusát, hogy használhassuk. */
 	glfwMakeContextCurrent(window);
