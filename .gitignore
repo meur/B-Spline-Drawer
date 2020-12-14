@@ -1,5 +1,2 @@
-OpenGLTemplate/
-x64/
 *.vcxproj*
-*.sln
 .vs/

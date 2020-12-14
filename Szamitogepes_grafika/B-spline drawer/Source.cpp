@@ -376,7 +376,7 @@ void display(GLFWwindow* window, double currentTime) {
 }
 
 int main(void) {
-	std::string filename = "C:/CODE/geomod/export2.txt";
+	std::string filename = "D:/D_nemethy/UNIversity/DE IK-PTI Msc/2020-2021 3. felev/Geometriai modellezés/Beadando_projekt(git)/export2.txt";
 	ifstream MyReadFile(filename);
 	string myText;
 	while (getline(MyReadFile, myText)) {
